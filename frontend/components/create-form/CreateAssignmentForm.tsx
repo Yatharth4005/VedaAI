@@ -42,6 +42,7 @@ export function CreateAssignmentForm() {
     control,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<CreateAssignmentFormValues>({
     resolver: zodResolver(createAssignmentSchema),
@@ -97,6 +98,13 @@ export function CreateAssignmentForm() {
       setLoading(false);
     }
   }
+
+  const handleDatePick = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value; // YYYY-MM-DD
+    if (!val) return;
+    const [year, month, day] = val.split("-");
+    setValue("dueDate", `${day}-${month}-${year}`, { shouldValidate: true });
+  };
 
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden bg-background">
@@ -176,10 +184,17 @@ export function CreateAssignmentForm() {
                     className="rounded-xl h-10 pr-11 border-border/80 text-sm font-medium text-[#111827] focus:ring-[#F97316]/20 focus:border-[#F97316]"
                     {...register("dueDate")}
                   />
-                  <Calendar
-                    size={16}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9CA3AF] pointer-events-none"
-                  />
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center cursor-pointer">
+                    <Calendar
+                      size={16}
+                      className="text-[#9CA3AF] pointer-events-none"
+                    />
+                    <input
+                      type="date"
+                      className="absolute inset-0 opacity-0 cursor-pointer"
+                      onChange={handleDatePick}
+                    />
+                  </div>
                 </div>
                 {errors.dueDate && (
                   <p className="text-xs text-red-500">{errors.dueDate.message}</p>
@@ -251,7 +266,7 @@ export function CreateAssignmentForm() {
                   />
                   <Mic
                     size={18}
-                    className="absolute right-4.5 bottom-4.5 text-[#9CA3AF] cursor-pointer hover:text-[#111827] transition-colors"
+                    className="absolute right-4 bottom-4 text-[#9CA3AF] cursor-pointer hover:text-[#111827] transition-colors"
                   />
                 </div>
               </div>
