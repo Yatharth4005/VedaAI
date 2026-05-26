@@ -1,3 +1,6 @@
+import { Section } from "@/lib/types";
+import { QuestionItem } from "./QuestionItem";
+
 export function SectionBlock({ section }: { section: Section }) {
   const parts = section.title.split(/\s*-\s*|\s*–\s*|\s*:\s*/);
   const mainTitle = parts[0] || "Section";

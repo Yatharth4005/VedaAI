@@ -83,7 +83,6 @@ function AssignmentOutputInner() {
       <div className="hidden md:block">
         <PageHeader
           title="Create New"
-          showSparkle
           backHref="/assignments"
         />
       </div>

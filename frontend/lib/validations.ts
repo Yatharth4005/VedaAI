@@ -48,9 +48,9 @@ export const createAssignmentSchema = z.object({
     .refine((v) => {
       const parsed = parseDMY(v);
       return parsed !== null && parsed > todayStart();
-    }, () => ({
+    }, {
       message: `Due date must be after today (${formatTodayDMY()}). Check the year.`,
-    })),
+    }),
   questionTypes: z
     .array(questionTypeRowSchema)
     .min(1, "Add at least one question type")
