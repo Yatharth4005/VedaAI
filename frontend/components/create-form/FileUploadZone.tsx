@@ -22,15 +22,15 @@ export function FileUploadZone({ value, onChange }: Props) {
   };
 
   return (
-    <div>
+    <div className="w-full select-none">
       <div
         role="button"
         tabIndex={0}
         className={cn(
-          "border-2 border-dashed rounded-2xl p-8 md:p-10 text-center cursor-pointer transition-colors bg-gray-50/50",
+          "border-2 border-dashed rounded-[20px] p-8 md:p-10 text-center cursor-pointer transition-all bg-gray-50/30",
           dragging
-            ? "border-accent bg-accent-light"
-            : "border-border hover:border-accent/40"
+            ? "border-[#F97316] bg-[#FFF7ED]"
+            : "border-border hover:border-[#F97316]/40"
         )}
         onClick={() => inputRef.current?.click()}
         onKeyDown={(e) => e.key === "Enter" && inputRef.current?.click()}
@@ -57,36 +57,39 @@ export function FileUploadZone({ value, onChange }: Props) {
           }}
         />
         {value ? (
-          <div className="flex items-center justify-center gap-3">
-            <FileText size={20} className="text-accent" />
-            <span className="text-sm font-medium">{value.name}</span>
+          <div className="flex items-center justify-center gap-3 py-4">
+            <FileText size={24} className="text-[#F97316]" />
+            <span className="text-sm font-bold text-[#111827] truncate max-w-xs">{value.name}</span>
             <button
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 onChange(null);
               }}
-              className="text-text-muted hover:text-red-500"
+              className="w-7 h-7 rounded-full bg-red-50 hover:bg-red-100 flex items-center justify-center text-red-500 transition-colors"
             >
-              <X size={16} />
+              <X size={14} strokeWidth={2.5} />
             </button>
           </div>
         ) : (
-          <>
-            <Upload size={28} className="text-text-muted mx-auto mb-3" />
-            <p className="text-sm font-medium text-text-primary">
+          <div className="flex flex-col items-center">
+            {/* Cloud Upload Icon */}
+            <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+              <Upload size={22} className="text-[#6B7280]" />
+            </div>
+            <p className="text-sm font-extrabold text-[#111827] tracking-tight">
               Choose a file or drag & drop it here
             </p>
-            <p className="text-xs text-text-muted mt-1">
+            <p className="text-xs font-semibold text-[#9CA3AF] mt-1">
               JPEG, PNG, upto 10MB
             </p>
-            <span className="inline-block mt-4 text-sm border border-border rounded-xl px-5 py-2 bg-surface text-text-secondary">
+            <span className="inline-block mt-5 text-xs font-bold border border-border/80 rounded-full px-6 py-2 bg-[#F3F4F6] text-[#6B7280] hover:bg-gray-200 transition-colors shadow-sm">
               Browse Files
             </span>
-          </>
+          </div>
         )}
       </div>
-      <p className="text-xs text-text-muted mt-2 text-center md:text-left">
+      <p className="text-xs font-semibold text-[#9CA3AF] mt-3.5 text-center">
         Upload images of your preferred document/image
       </p>
     </div>

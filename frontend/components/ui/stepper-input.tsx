@@ -23,28 +23,28 @@ export function StepperInput({
   return (
     <div
       className={cn(
-        "flex items-center h-9 border border-border rounded-lg bg-surface overflow-hidden",
+        "flex items-center justify-between w-28 h-9 border border-border/80 rounded-full bg-[#F9FAFB] px-1 overflow-hidden select-none shrink-0",
         className
       )}
     >
       <button
         type="button"
         onClick={() => onChange(Math.max(min, safe - 1))}
-        className="px-2.5 h-full hover:bg-gray-50 text-text-secondary border-r border-border"
+        className="w-7 h-7 rounded-full hover:bg-gray-200 text-[#6B7280] flex items-center justify-center transition-colors outline-none"
         aria-label="Decrease"
       >
-        <Minus size={14} />
+        <Minus size={14} strokeWidth={2.5} />
       </button>
-      <span className="flex-1 text-center text-sm font-medium tabular-nums min-w-[2rem]">
+      <span className="text-sm font-extrabold text-[#111827] tabular-nums text-center w-8 select-none">
         {safe}
       </span>
       <button
         type="button"
         onClick={() => onChange(Math.min(max, safe + 1))}
-        className="px-2.5 h-full hover:bg-gray-50 text-text-secondary border-l border-border"
+        className="w-7 h-7 rounded-full hover:bg-gray-200 text-[#6B7280] flex items-center justify-center transition-colors outline-none"
         aria-label="Increase"
       >
-        <Plus size={14} />
+        <Plus size={14} strokeWidth={2.5} />
       </button>
     </div>
   );

@@ -32,22 +32,9 @@ export function QuestionTypeRow({
   const rowErrors = errors.questionTypes?.[index];
 
   return (
-    <div className="relative md:grid md:grid-cols-[1fr_160px_140px_32px] md:gap-3 md:items-start bg-gray-50/80 md:bg-transparent border border-border md:border-0 rounded-xl md:rounded-none p-4 md:p-0 space-y-3 md:space-y-0">
-      {canRemove && (
-        <button
-          type="button"
-          onClick={onRemove}
-          className="absolute top-3 right-3 md:relative md:top-auto md:right-auto md:flex md:h-10 md:items-center md:justify-center text-text-muted hover:text-red-500"
-          aria-label="Remove row"
-        >
-          <X size={16} />
-        </button>
-      )}
-
-      <div>
-        <p className="text-xs font-medium text-text-secondary mb-1.5 md:sr-only">
-          Question Type
-        </p>
+    <div className="grid grid-cols-[1fr_24px_112px_112px] gap-4 items-center select-none w-full">
+      {/* Dropdown Selector */}
+      <div className="min-w-0">
         <Controller
           control={control}
           name={`questionTypes.${index}.type`}
@@ -58,7 +45,7 @@ export function QuestionTypeRow({
               onBlur={field.onBlur}
               name={field.name}
               ref={field.ref}
-              className="w-full h-10 border border-border rounded-xl px-3 text-sm bg-surface text-text-primary focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent cursor-pointer"
+              className="w-full h-10 border border-border/80 rounded-xl px-4.5 text-sm font-semibold bg-surface text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#F97316]/20 focus:border-[#F97316] cursor-pointer transition-all"
             >
               <option value="" disabled>
                 Select type…
@@ -76,41 +63,52 @@ export function QuestionTypeRow({
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-3 md:contents">
-        <div>
-          <p className="text-xs font-medium text-text-secondary mb-1.5 md:sr-only">
-            No. of Questions
-          </p>
-          <Controller
-            control={control}
-            name={`questionTypes.${index}.count`}
-            render={({ field }) => (
-              <StepperInput
-                value={Number(field.value) || 1}
-                onChange={field.onChange}
-                min={1}
-                max={50}
-              />
-            )}
-          />
-        </div>
-        <div>
-          <p className="text-xs font-medium text-text-secondary mb-1.5 md:sr-only">
-            Marks
-          </p>
-          <Controller
-            control={control}
-            name={`questionTypes.${index}.marksPerQuestion`}
-            render={({ field }) => (
-              <StepperInput
-                value={Number(field.value) || 1}
-                onChange={field.onChange}
-                min={1}
-                max={100}
-              />
-            )}
-          />
-        </div>
+      {/* Delete X Button between selector and first stepper */}
+      <div className="flex justify-center items-center">
+        {canRemove ? (
+          <button
+            type="button"
+            onClick={onRemove}
+            className="w-6 h-6 rounded-full hover:bg-red-50 text-[#9CA3AF] hover:text-red-500 flex items-center justify-center transition-colors"
+            aria-label="Remove row"
+          >
+            <X size={16} strokeWidth={2.5} />
+          </button>
+        ) : (
+          <div className="w-6 h-6" /> // spacer
+        )}
+      </div>
+
+      {/* No. of Questions Stepper */}
+      <div className="flex justify-center">
+        <Controller
+          control={control}
+          name={`questionTypes.${index}.count`}
+          render={({ field }) => (
+            <StepperInput
+              value={Number(field.value) || 1}
+              onChange={field.onChange}
+              min={1}
+              max={50}
+            />
+          )}
+        />
+      </div>
+
+      {/* Marks Stepper */}
+      <div className="flex justify-center">
+        <Controller
+          control={control}
+          name={`questionTypes.${index}.marksPerQuestion`}
+          render={({ field }) => (
+            <StepperInput
+              value={Number(field.value) || 1}
+              onChange={field.onChange}
+              min={1}
+              max={100}
+            />
+          )}
+        />
       </div>
     </div>
   );
