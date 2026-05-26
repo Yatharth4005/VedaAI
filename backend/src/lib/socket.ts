@@ -4,13 +4,18 @@ import { Server as HttpServer } from "http";
 let io: SocketServer;
 
 export function initSocket(httpServer: HttpServer): SocketServer {
+  const allowedOrigins = [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "https://veda-ai-three-eta.vercel.app"
+  ];
+  if (process.env.FRONTEND_URL) {
+    allowedOrigins.push(process.env.FRONTEND_URL);
+  }
+
   io = new SocketServer(httpServer, {
     cors: {
-      origin: [
-        "http://localhost:3000",
-        "http://localhost:3001",
-        "https://veda-ai-three-eta.vercel.app"
-      ],
+      origin: allowedOrigins,
       methods: ["GET", "POST"],
       credentials: true,
     },

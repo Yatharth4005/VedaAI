@@ -8,7 +8,7 @@ import QuestionPaper from "../models/QuestionPaper";
 import { generateQuestionPaper } from "../services/aiService";
 import { AssignmentJobData } from "./assignmentQueue";
 
-const serverUrl = `http://localhost:${process.env.PORT ?? 4000}`;
+const serverUrl = process.env.BACKEND_URL ?? `http://localhost:${process.env.PORT ?? 4000}`;
 
 async function emitToRoom(
   assignmentId: string,
