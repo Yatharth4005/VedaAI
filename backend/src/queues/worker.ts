@@ -15,7 +15,7 @@ async function emitToRoom(
   event: string,
   data: object
 ): Promise<void> {
-  const client = SocketClient(serverUrl, { transports: ["websocket"] });
+  const client = SocketClient(serverUrl, { transports: ["polling", "websocket"] });
   await new Promise<void>((resolve, reject) => {
     const timeout = setTimeout(() => reject(new Error("Socket connect timeout")), 5000);
     client.on("connect", () => {
