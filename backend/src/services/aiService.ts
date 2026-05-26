@@ -31,12 +31,12 @@ const paperSchema = z.object({
 
 export type GeneratedPaper = z.infer<typeof paperSchema>;
 
-function getModel() {
+function getModel(modelName: string) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error("GEMINI_API_KEY is not set");
   const genAI = new GoogleGenerativeAI(apiKey);
   return genAI.getGenerativeModel({
-    model: process.env.GEMINI_MODEL ?? "gemini-2.5-flash",
+    model: modelName,
     generationConfig: {
       responseMimeType: "application/json",
       temperature: 0.7,
@@ -113,8 +113,10 @@ function parseJsonResponse(raw: string): unknown {
   return JSON.parse(clean);
 }
 
-async function callGemini(prompt: string): Promise<string> {
-  const model = getModel();
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function callGemini(prompt: string, modelName: string): Promise<string> {
+  const model = getModel(modelName);
   const result = await model.generateContent({
     contents: [
       {
@@ -132,20 +134,58 @@ async function callGemini(prompt: string): Promise<string> {
   return result.response.text();
 }
 
+async function callGeminiWithRetry(prompt: string, modelName: string, maxAttempts = 4): Promise<string> {
+  let lastError: any = null;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      return await callGemini(prompt, modelName);
+    } catch (error: any) {
+      lastError = error;
+      const isTransient =
+        error?.status === 503 ||
+        error?.status === 429 ||
+        String(error).includes("503") ||
+        String(error).includes("high demand") ||
+        String(error).includes("Service Unavailable") ||
+        String(error).includes("Too Many Requests");
+
+      if (isTransient && attempt < maxAttempts) {
+        const delay = Math.pow(2, attempt) * 1000; // 2s, 4s, 8s
+        console.warn(
+          `[aiService] Gemini call to ${modelName} failed (Attempt ${attempt}/${maxAttempts}) due to transient error. Retrying in ${delay / 1000}s...`
+        );
+        await sleep(delay);
+        continue;
+      }
+      throw error;
+    }
+  }
+  throw lastError;
+}
+
 export async function generateQuestionPaper(
   assignment: IAssignment
 ): Promise<GeneratedPaper> {
   const prompt = buildPrompt(assignment);
+  const modelName = process.env.GEMINI_MODEL ?? "gemini-2.5-flash";
 
+  console.log(`[aiService] Starting question paper generation with model: ${modelName}...`);
   try {
-    const raw = await callGemini(prompt);
-    return paperSchema.parse(parseJsonResponse(raw));
-  } catch (firstError) {
-    console.warn("Gemini first attempt failed, retrying:", firstError);
-    const fixPrompt =
-      prompt +
-      "\n\nYour previous response was invalid JSON. Return ONLY valid JSON, nothing else.";
-    const raw = await callGemini(fixPrompt);
-    return paperSchema.parse(parseJsonResponse(raw));
+    const raw = await callGeminiWithRetry(prompt, modelName);
+    const parsed = parseJsonResponse(raw);
+    return paperSchema.parse(parsed);
+  } catch (error: any) {
+    console.warn(`[aiService] Primary generation attempt failed. Attempting self-correction...`);
+    try {
+      const fixPrompt =
+        prompt +
+        "\n\nYour previous response was invalid. Return ONLY valid JSON matching the exact schema requested.";
+      const rawFix = await callGeminiWithRetry(fixPrompt, modelName);
+      const parsedFix = parseJsonResponse(rawFix);
+      return paperSchema.parse(parsedFix);
+    } catch (fixError: any) {
+      console.error(`[aiService] Generation failed:`, fixError.message ?? fixError);
+      throw new Error(`Failed to generate question paper. Error: ${fixError.message ?? fixError}`);
+    }
   }
 }

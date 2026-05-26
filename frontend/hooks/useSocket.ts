@@ -13,8 +13,11 @@ export function useSocket(assignmentId: string | null) {
   useEffect(() => {
     if (!assignmentId) return;
 
-    const wsUrl =
+    let wsUrl =
       process.env.NEXT_PUBLIC_WS_URL ?? "http://localhost:4000";
+    if (wsUrl && !wsUrl.startsWith("http://") && !wsUrl.startsWith("https://") && !wsUrl.startsWith("ws://") && !wsUrl.startsWith("wss://")) {
+      wsUrl = `https://${wsUrl}`;
+    }
     const socket = io(wsUrl, { transports: ["websocket", "polling"] });
     socketRef.current = socket;
 

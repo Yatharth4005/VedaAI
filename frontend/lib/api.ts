@@ -1,6 +1,9 @@
 import { Assignment, QuestionPaper } from "./types";
 
-const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+let BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+if (BASE && !BASE.startsWith("http://") && !BASE.startsWith("https://")) {
+  BASE = `https://${BASE}`;
+}
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, init);
