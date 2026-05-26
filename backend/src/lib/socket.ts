@@ -6,8 +6,13 @@ let io: SocketServer;
 export function initSocket(httpServer: HttpServer): SocketServer {
   io = new SocketServer(httpServer, {
     cors: {
-      origin: "*",
+      origin: [
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "https://veda-ai-three-eta.vercel.app"
+      ],
       methods: ["GET", "POST"],
+      credentials: true,
     },
     transports: ["websocket", "polling"],
   });
