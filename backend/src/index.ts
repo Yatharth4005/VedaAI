@@ -14,7 +14,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "http://localhost:3001",
-      "https://veda-ai-three-eta.vercel.app/assignments"
+      "https://veda-ai-three-eta.vercel.app"
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
