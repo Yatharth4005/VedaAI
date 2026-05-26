@@ -32,10 +32,46 @@ function AssignmentOutputInner() {
 
   const [localPaper, setLocalPaper] = useState<QuestionPaper | null>(null);
   const [regenerating, setRegenerating] = useState(false);
+  const [smoothProgress, setSmoothProgress] = useState(0);
 
   const socketActive =
     isGenerating || jobStatus === "processing" || jobStatus === "pending";
   useSocket(socketActive ? id : null);
+
+  // Smooth progressive progress bar effect
+  useEffect(() => {
+    if (jobProgress === 0) {
+      setSmoothProgress(0);
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setSmoothProgress((prev) => {
+        if (prev < jobProgress) {
+          // Rapidly catch up to the backend's real progress (Ease-out transition)
+          const diff = jobProgress - prev;
+          const step = diff > 5 ? Math.ceil(diff / 6) : 1;
+          return Math.min(prev + step, jobProgress);
+        } else if (prev === 30 && jobProgress === 30) {
+          // Gemini is thinking: slowly tick up 1% at a time to keep the UI alive and active
+          return prev + 1;
+        } else if (prev > 30 && prev < 70 && jobProgress === 30) {
+          // Continue slowly ticking up while waiting for AI generation
+          return prev + 1;
+        }
+        return prev;
+      });
+    }, 100);
+
+    return () => clearInterval(timer);
+  }, [jobProgress]);
+
+  // Clean URL query parameters once paper is generated and ready
+  useEffect(() => {
+    if (questionPaper && isGenerating) {
+      router.replace(`/assignments/${id}`);
+    }
+  }, [questionPaper, isGenerating, id, router]);
 
   useEffect(() => {
     if (!isGenerating && !questionPaper) {
@@ -63,6 +99,7 @@ function AssignmentOutputInner() {
   async function handleRegenerate() {
     setRegenerating(true);
     setJobStatus("processing", 0);
+    setSmoothProgress(0);
     setQuestionPaper(null);
     setLocalPaper(null);
     await api.assignments.regenerate(id);
@@ -96,8 +133,8 @@ function AssignmentOutputInner() {
             <h3 className="text-lg font-semibold mb-2">
               Generating your question paper…
             </h3>
-            <Progress value={jobProgress} className="h-2 max-w-xs mx-auto" />
-            <p className="text-xs text-text-muted mt-2">{jobProgress}%</p>
+            <Progress value={smoothProgress} className="h-2 max-w-xs mx-auto" />
+            <p className="text-xs text-text-muted mt-2">{smoothProgress}%</p>
           </div>
         )}
 

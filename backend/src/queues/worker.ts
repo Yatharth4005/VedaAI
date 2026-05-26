@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { Worker } from "bullmq";
-import { io as SocketClient } from "socket.io-client";
+import { io as SocketClient, Socket } from "socket.io-client";
 import { redis } from "../lib/redis";
 import { connectMongoDB } from "../lib/mongodb";
 import Assignment from "../models/Assignment";
@@ -10,25 +10,58 @@ import { AssignmentJobData } from "./assignmentQueue";
 
 const serverUrl = process.env.BACKEND_URL ?? `http://localhost:${process.env.PORT ?? 4000}`;
 
+let socket: Socket | null = null;
+
+function getSocket(): Socket {
+  if (!socket) {
+    console.log(`[worker-socket] Initializing socket connection to: ${serverUrl}`);
+    socket = SocketClient(serverUrl, {
+      transports: ["websocket", "polling"],
+      reconnection: true,
+      reconnectionAttempts: Infinity,
+      reconnectionDelay: 1000,
+    });
+
+    socket.on("connect", () => {
+      console.log("[worker-socket] Connected to backend socket server");
+    });
+
+    socket.on("connect_error", (err: Error) => {
+      console.error("[worker-socket] Connection error:", err.message);
+    });
+
+    socket.on("disconnect", (reason: string) => {
+      console.warn("[worker-socket] Disconnected from backend socket server:", reason);
+    });
+  }
+  return socket;
+}
+
+// Initialize socket immediately
+getSocket();
+
 async function emitToRoom(
   assignmentId: string,
   event: string,
   data: object
 ): Promise<void> {
-  const client = SocketClient(serverUrl, { transports: ["polling", "websocket"] });
-  await new Promise<void>((resolve, reject) => {
-    const timeout = setTimeout(() => reject(new Error("Socket connect timeout")), 5000);
-    client.on("connect", () => {
-      clearTimeout(timeout);
-      resolve();
+  const client = getSocket();
+  
+  if (!client.connected) {
+    await new Promise<void>((resolve) => {
+      const handleConnect = () => {
+        clearTimeout(timeout);
+        resolve();
+      };
+      const timeout = setTimeout(() => {
+        client.off("connect", handleConnect);
+        resolve();
+      }, 3000);
+      client.once("connect", handleConnect);
     });
-    client.on("connect_error", (err) => {
-      clearTimeout(timeout);
-      reject(err);
-    });
-  });
+  }
+  
   client.emit("server-emit", { room: assignmentId, event, data });
-  client.disconnect();
 }
 
 async function main() {
