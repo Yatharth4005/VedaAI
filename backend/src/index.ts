@@ -1,0 +1,37 @@
+import "dotenv/config";
+import express from "express";
+import cors from "cors";
+import { createServer } from "http";
+import { connectMongoDB } from "./lib/mongodb";
+import { initSocket } from "./lib/socket";
+import assignmentRoutes from "./routes/assignments";
+
+const app = express();
+const httpServer = createServer(app);
+
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL ?? "http://localhost:3000",
+  })
+);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/api/assignments", assignmentRoutes);
+app.get("/health", (_req, res) => res.json({ status: "ok" }));
+
+initSocket(httpServer);
+
+const PORT = parseInt(process.env.PORT ?? "4000", 10);
+
+async function start() {
+  await connectMongoDB();
+  httpServer.listen(PORT, () => {
+    console.log(`API running on http://localhost:${PORT}`);
+  });
+}
+
+start().catch((err) => {
+  console.error("Failed to start server:", err);
+  process.exit(1);
+});
