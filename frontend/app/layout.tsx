@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={outfit.className}>
-        <div className="flex h-screen w-screen overflow-hidden bg-[#EAEAEA] md:p-5 md:gap-5">
+        <div className="flex h-[100dvh] w-screen overflow-hidden bg-[#EAEAEA] md:p-5 md:gap-5">
           <aside className="hidden md:flex shrink-0">
             <Sidebar />
           </aside>

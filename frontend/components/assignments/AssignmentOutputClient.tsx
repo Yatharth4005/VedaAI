@@ -171,12 +171,10 @@ function AssignmentOutputInner() {
 
   return (
     <div className="h-full overflow-y-auto pb-28 md:pb-6 bg-background touch-pan-y">
-      <div className="hidden md:block">
-        <PageHeader
-          title="Create New"
-          backHref="/assignments"
-        />
-      </div>
+      <PageHeader
+        title="Create New"
+        backHref="/assignments"
+      />
 
       <div className="p-4 md:p-6 space-y-4 max-w-4xl mx-auto">
         {isLoading && (

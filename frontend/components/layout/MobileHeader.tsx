@@ -1,11 +1,20 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Bell, Menu } from "lucide-react";
 import { VedaLogo } from "./VedaLogo";
 import Image from "next/image";
 
 export function MobileHeader() {
+  const pathname = usePathname();
+  
+  // Only show the global top header on top-level hub pages.
+  // Hide it on sub-pages (like /assignments/new or details) to maximize vertical screen space.
+  const showHeader = ["/", "/assignments", "/library", "/toolkit"].includes(pathname);
+
+  if (!showHeader) return null;
+
   return (
     <header className="md:hidden flex items-center justify-between px-4 py-3 bg-surface border-b border-border sticky top-0 z-30 touch-none">
       <Link href="/assignments">
