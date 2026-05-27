@@ -1,6 +1,6 @@
 # VedaAI — AI Assessment Creator
 
-> A premium, AI-powered exam and question paper generator designed for school teachers. Built with a robust monorepo architecture using Next.js 14, Express, BullMQ, Redis, Socket.io, and the Google Gemini API.
+> An AI-powered exam and question paper generator for teachers, built with Next.js, Express, Redis, BullMQ, Socket.io, and Google Gemini AI.
 
 ---
 
@@ -11,7 +11,7 @@ VedaAI is engineered to handle complex LLM generation flows asynchronously, ensu
 ```
 ┌───────────────────────────────────────┐
 │          Next.js 14 Frontend          │ (Deployed on Vercel)
-│     (Zustand, Tailwind, Socket.io)     │
+│     (Zustand, Tailwind, Socket.io)    │
 └──────────────────┬────────────────────┘
                    │ REST APIs &
                    │ Realtime WebSockets
@@ -39,10 +39,12 @@ VedaAI is engineered to handle complex LLM generation flows asynchronously, ensu
 
 ## Tech Stack & Key Features
 
-*   **Frontend:** Next.js 14 (App Router), TypeScript, Tailwind CSS, shadcn/ui components, Zustand (State Management), React Hook Form + Zod (Validation), `Socket.io-client` for real-time progress updates, and `@react-pdf/renderer` for pixel-perfect PDF exports.
-*   **Backend:** Express, Mongoose (MongoDB), BullMQ (Job Queue), `Socket.io` (Realtime events).
-*   **AI Engine:** Google Gemini SDK (`@google/generative-ai`) leveraging Zod-parsed structured JSON outputs via `gemini-2.5-flash`.
-*   **Database & Cache:** MongoDB Atlas for persistence and Upstash Redis for message queuing and job handling.
+* Built with Next.js, Express, MongoDB, Redis, BullMQ, and Socket.io
+* Uses Google Gemini AI for generating question papers
+* Real-time progress updates with Socket.io
+* Clean and responsive UI using Tailwind CSS and shadcn/ui
+* Supports PDF export for generated papers
+* Form validation with React Hook Form and Zod
 
 ---
 
