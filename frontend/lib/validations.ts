@@ -38,7 +38,45 @@ export const questionTypeRowSchema = z.object({
 
 export const createAssignmentSchema = z.object({
   subject: z.string().min(1, "Subject is required"),
-  class: z.string().min(1, "Class is required"),
+  class: z
+    .string()
+    .min(1, "Class is required")
+    .refine(
+      (val) => {
+        // Extract all numeric digits from the input string (e.g., "Class 9th" -> 9, "86" -> 86)
+        const match = val.match(/\d+/);
+        if (match) {
+          const classNum = parseInt(match[0], 10);
+          return classNum >= 1 && classNum <= 12;
+        }
+
+        // If no numbers are found, check for standard pre-school and textual grades
+        const lower = val.toLowerCase().trim();
+        const validTextGrades = [
+          "nursery",
+          "lkg",
+          "ukg",
+          "kindergarten",
+          "prep",
+          "first",
+          "second",
+          "third",
+          "fourth",
+          "fifth",
+          "sixth",
+          "seventh",
+          "eighth",
+          "ninth",
+          "tenth",
+          "eleventh",
+          "twelfth",
+        ];
+        return validTextGrades.some((g) => lower.includes(g));
+      },
+      {
+        message: "Class must be up to 12th grade only (e.g., 8th or Class 12)",
+      }
+    ),
   dueDate: z
     .string()
     .min(1, "Due date is required")
