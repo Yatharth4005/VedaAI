@@ -4,38 +4,14 @@
 
 ---
 
+https://github.com/user-attachments/assets/205adcb6-af44-410e-80cf-a88698e354e7
+
 ## Architecture Overview
 
 VedaAI is engineered to handle complex LLM generation flows asynchronously, ensuring that teachers never experience a frozen UI while waiting for questions to be structured, formatted, and validated.
 
-```
-┌───────────────────────────────────────┐
-│          Next.js 14 Frontend          │ (Deployed on Vercel)
-│     (Zustand, Tailwind, Socket.io)    │
-└──────────────────┬────────────────────┘
-                   │ REST APIs &
-                   │ Realtime WebSockets
-                   ▼
-┌───────────────────────────────────────┐
-│          Express API Server           │ (Deployed on Railway)
-│      (CORS, Socket.io, Mongoose)      │
-└──────────────────┬────────────────────┘
-                   │
-         ┌─────────┴─────────┐
-         ▼                   ▼
-┌─────────────────┐ ┌─────────────────┐
-│  MongoDB Atlas  │ │  Upstash Redis  │
-│  (Data Store)   │ │  (BullMQ Queue) │
-└─────────────────┘ └────────┬────────┘
-                             │
-                             ▼
-┌───────────────────────────────────────┐
-│             BullMQ Worker             │ (Deployed on Railway)
-│     (Gemini 2.5 Flash, Validation)    │
-└───────────────────────────────────────┘
-```
+<img width="1200" height="900" alt="WhatsApp Image 2026-05-28 at 2 16 47 AM" src="https://github.com/user-attachments/assets/bbb5053e-5b55-477c-821c-d9a2f191c7ff" />
 
----
 
 ## Tech Stack & Key Features
 
