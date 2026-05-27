@@ -15,7 +15,7 @@ const tabs = [
 export function MobileTabBar() {
   const pathname = usePathname();
   return (
-    <nav className="md:hidden fixed bottom-3 left-3 right-3 z-50">
+    <nav className="md:hidden fixed bottom-3 left-3 right-3 z-50 touch-none">
       <div className="flex bg-cta rounded-2xl shadow-lg px-2 py-2">
         {tabs.map(({ label, href, icon: Icon }) => {
           const active =

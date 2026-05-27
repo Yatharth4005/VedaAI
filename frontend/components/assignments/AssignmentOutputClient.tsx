@@ -38,6 +38,11 @@ function AssignmentOutputInner() {
     isGenerating || jobStatus === "processing" || jobStatus === "pending";
   useSocket(socketActive ? id : null);
 
+  const isLoading =
+    jobStatus === "processing" ||
+    jobStatus === "pending" ||
+    (isGenerating && jobStatus !== "completed" && !localPaper);
+
   // Smooth progressive progress bar effect
   useEffect(() => {
     if (jobProgress === 0) {
@@ -73,24 +78,77 @@ function AssignmentOutputInner() {
     }
   }, [questionPaper, isGenerating, id, router]);
 
+  // Initial load and status sync
   useEffect(() => {
-    if (!isGenerating && !questionPaper) {
-      api.assignments
-        .result(id)
-        .then((paper) => {
-          setQuestionPaper(paper);
-          setLocalPaper(paper);
-          setJobStatus("completed", 100);
-        })
-        .catch(() => {
-          api.assignments.get(id).then((a) => {
-            if (a.status === "processing" || a.status === "pending") {
-              setJobStatus("processing", 10);
-            }
+    console.log(`[AssignmentOutput] Syncing initial status for assignment: ${id}`);
+    api.assignments
+      .get(id)
+      .then((a) => {
+        console.log(`[AssignmentOutput] Initial status fetch result: ${a.status}`);
+        if (a.status === "completed") {
+          api.assignments.result(id).then((paper) => {
+            setQuestionPaper(paper);
+            setLocalPaper(paper);
+            setJobStatus("completed", 100);
           });
+        } else if (a.status === "failed") {
+          setJobStatus("failed");
+        } else if (a.status === "processing" || a.status === "pending") {
+          setJobStatus("processing", a.status === "processing" ? 30 : 10);
+        }
+      })
+      .catch(() => {
+        // Fallback to fetch result directly in case the assignment get endpoint failed but paper exists
+        api.assignments
+          .result(id)
+          .then((paper) => {
+            setQuestionPaper(paper);
+            setLocalPaper(paper);
+            setJobStatus("completed", 100);
+          })
+          .catch(() => {
+            // Keep loading or set to processing 10
+            setJobStatus("processing", 10);
+          });
+      });
+  }, [id, setJobStatus, setQuestionPaper]);
+
+  // Failsafe Polling Fallback: Check assignment status periodically if still loading/generating
+  useEffect(() => {
+    if (!isLoading) return;
+
+    console.log(`[AssignmentOutput] Starting failsafe polling fallback for assignment: ${id}`);
+    const interval = setInterval(() => {
+      console.log(`[AssignmentOutput] Polling status for: ${id}`);
+      api.assignments
+        .get(id)
+        .then((a) => {
+          console.log(`[AssignmentOutput] Polled status: ${a.status}`);
+          if (a.status === "completed") {
+            api.assignments.result(id).then((paper) => {
+              setQuestionPaper(paper);
+              setLocalPaper(paper);
+              setJobStatus("completed", 100);
+            });
+          } else if (a.status === "failed") {
+            setJobStatus("failed");
+          } else if (a.status === "processing") {
+            // Sync progress incrementally if socket updates are missed
+            if (jobProgress < 30) {
+              setJobStatus("processing", 30);
+            }
+          }
+        })
+        .catch((err) => {
+          console.error("[AssignmentOutput] Failsafe polling error:", err);
         });
-    }
-  }, [id, isGenerating, questionPaper, setQuestionPaper, setJobStatus]);
+    }, 3000);
+
+    return () => {
+      console.log(`[AssignmentOutput] Clearing failsafe polling fallback for: ${id}`);
+      clearInterval(interval);
+    };
+  }, [id, isLoading, jobProgress, setJobStatus, setQuestionPaper]);
 
   useEffect(() => {
     if (questionPaper) setLocalPaper(questionPaper);
@@ -107,16 +165,12 @@ function AssignmentOutputInner() {
     router.replace(`/assignments/${id}?generating=true`);
   }
 
-  const isLoading =
-    jobStatus === "processing" ||
-    jobStatus === "pending" ||
-    (isGenerating && jobStatus !== "completed" && !localPaper);
 
   const subject = localPaper?.metadata.subject ?? "your class";
   const cls = localPaper?.metadata.class ?? "";
 
   return (
-    <div className="h-full overflow-y-auto pb-28 md:pb-6 bg-background">
+    <div className="h-full overflow-y-auto pb-28 md:pb-6 bg-background touch-pan-y">
       <div className="hidden md:block">
         <PageHeader
           title="Create New"

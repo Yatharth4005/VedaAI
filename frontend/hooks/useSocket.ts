@@ -22,28 +22,42 @@ export function useSocket(assignmentId: string | null) {
     socketRef.current = socket;
 
     socket.on("connect", () => {
+      console.log(`[useSocket] Connected to backend Socket.io server. Joining room: ${assignmentId}`);
       socket.emit("join", { assignmentId });
     });
 
+    socket.on("connect_error", (err: Error) => {
+      console.error("[useSocket] Socket connection error:", err.message);
+    });
+
+    socket.on("disconnect", (reason: string) => {
+      console.warn("[useSocket] Socket disconnected:", reason);
+    });
+
     socket.on("job:progress", ({ progress }: { progress: number }) => {
+      console.log(`[useSocket] Received job:progress event for ${assignmentId}: ${progress}%`);
       setJobStatus("processing", progress);
     });
 
     socket.on("job:complete", async () => {
+      console.log(`[useSocket] Received job:complete event for ${assignmentId}. Fetching result...`);
       try {
         const paper = await api.assignments.result(assignmentId);
         setQuestionPaper(paper);
         setJobStatus("completed", 100);
-      } catch {
+      } catch (err) {
+        console.error("[useSocket] Failed to fetch completed question paper:", err);
         setJobStatus("failed");
       }
     });
 
-    socket.on("job:failed", () => {
+    socket.on("job:failed", ({ error }: { error?: string } = {}) => {
+      console.error(`[useSocket] Received job:failed event for ${assignmentId}:`, error);
       setJobStatus("failed");
     });
 
     return () => {
+      console.log(`[useSocket] Cleaning up socket connection for assignment: ${assignmentId}`);
       socket.disconnect();
       socketRef.current = null;
     };

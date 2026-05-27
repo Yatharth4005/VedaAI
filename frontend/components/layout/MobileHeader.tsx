@@ -7,7 +7,7 @@ import Image from "next/image";
 
 export function MobileHeader() {
   return (
-    <header className="md:hidden flex items-center justify-between px-4 py-3 bg-surface border-b border-border sticky top-0 z-30">
+    <header className="md:hidden flex items-center justify-between px-4 py-3 bg-surface border-b border-border sticky top-0 z-30 touch-none">
       <Link href="/assignments">
         <VedaLogo />
       </Link>

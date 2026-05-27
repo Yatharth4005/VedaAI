@@ -73,7 +73,7 @@ export default function AssignmentsPage() {
             </div>
 
             {/* Grid List Container (Scrollable) */}
-            <div className="flex-1 overflow-y-auto min-h-0 pr-1 space-y-4">
+            <div className="flex-1 overflow-y-auto min-h-0 pr-1 space-y-4 touch-pan-y">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-5">
                 {filtered.map((a) => (
                   <AssignmentCard

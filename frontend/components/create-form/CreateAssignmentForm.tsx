@@ -133,7 +133,7 @@ export function CreateAssignmentForm() {
         </div>
 
         {/* Floating White Card Body Wrapper (Scrollable) */}
-        <div className="flex-1 bg-surface border border-border/40 rounded-[32px] shadow-[0_16px_48px_-12px_rgba(0,0,0,0.06)] p-6 md:p-8 space-y-8 overflow-y-auto pb-8 min-h-0">
+        <div className="flex-1 bg-surface border border-border/40 rounded-[32px] shadow-[0_16px_48px_-12px_rgba(0,0,0,0.06)] p-6 md:p-8 space-y-8 overflow-y-auto pb-8 min-h-0 touch-pan-y">
 
           {/* Form Content Body */}
           <div className="space-y-6">

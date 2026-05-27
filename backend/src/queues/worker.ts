@@ -16,7 +16,6 @@ function getSocket(): Socket {
   if (!socket) {
     console.log(`[worker-socket] Initializing socket connection to: ${serverUrl}`);
     socket = SocketClient(serverUrl, {
-      transports: ["websocket", "polling"],
       reconnection: true,
       reconnectionAttempts: Infinity,
       reconnectionDelay: 1000,
