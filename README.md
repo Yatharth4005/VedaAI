@@ -6,6 +6,9 @@
 
 https://github.com/user-attachments/assets/205adcb6-af44-410e-80cf-a88698e354e7
 
+
+Deployed Link : https://veda-ai-three-eta.vercel.app/
+
 ## Architecture Overview
 
 VedaAI is engineered to handle complex LLM generation flows asynchronously, ensuring that teachers never experience a frozen UI while waiting for questions to be structured, formatted, and validated.
