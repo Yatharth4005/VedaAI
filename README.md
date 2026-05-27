@@ -27,6 +27,20 @@ VedaAI is engineered to handle complex LLM generation flows asynchronously, ensu
 
 ---
 
+## Key Technical Challenges & Approach
+
+* **CORS & Real-time WebSockets**:
+  * *Challenge*: The frontend (Vercel) and backend (Railway) communicate across distinct domains. Dynamic `Socket.io` connection upgrades, handshakes, and credentials require secure handling across origins.
+  * *Approach*: Configured a strict, dynamically verified CORS policy on the Express server and initialized the WebSockets (`Socket.io`) instance with matching credentials and origin configurations.
+* **Long-Running LLM Requests & Timeouts**:
+  * *Challenge*: Generating papers via Gemini AI takes 5–15 seconds, triggering 504 Gateway Timeouts on hosting platforms.
+  * *Approach*: Engineered an **Asynchronous Job Queue** (Redis + BullMQ) so requests respond instantly with `202 Accepted`, while background workers process jobs and stream progress via WebSockets.
+* **Non-Deterministic LLM Output**:
+  * *Challenge*: LLM output formats are unpredictable and can break database or UI JSON schemas.
+  * *Approach*: Enforced structured formatting using Gemini's native `responseSchema` combined with strict **Zod validations** at the server and worker levels.
+
+---
+
 ## Local Setup & Installation
 
 ### Prerequisites
