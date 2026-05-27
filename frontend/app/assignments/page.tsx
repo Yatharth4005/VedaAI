@@ -6,8 +6,6 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { EmptyState } from "@/components/assignments/EmptyState";
 import { AssignmentCard } from "@/components/assignments/AssignmentCard";
 import { FloatingCreateButton } from "@/components/assignments/FloatingCreateButton";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useAssignments } from "@/hooks/useAssignments";
 
 export default function AssignmentsPage() {
