@@ -11,7 +11,7 @@ VedaAI is engineered to handle complex LLM generation flows asynchronously, ensu
 ```
 ┌───────────────────────────────────────┐
 │          Next.js 14 Frontend          │ (Deployed on Vercel)
-│     (Zustand, Tailwind, Socket.io)     │
+│     (Zustand, Tailwind, Socket.io)    │
 └──────────────────┬────────────────────┘
                    │ REST APIs &
                    │ Realtime WebSockets
