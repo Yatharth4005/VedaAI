@@ -29,8 +29,8 @@ export function FileUploadZone({ value, onChange }: Props) {
         className={cn(
           "border-2 border-dashed rounded-[20px] p-8 md:p-10 text-center cursor-pointer transition-all bg-gray-50/30",
           dragging
-            ? "border-[#F97316] bg-[#FFF7ED]"
-            : "border-border hover:border-[#F97316]/40"
+            ? "border-[#111827] bg-gray-50"
+            : "border-border/80 hover:border-gray-400"
         )}
         onClick={() => inputRef.current?.click()}
         onKeyDown={(e) => e.key === "Enter" && inputRef.current?.click()}
@@ -58,7 +58,7 @@ export function FileUploadZone({ value, onChange }: Props) {
         />
         {value ? (
           <div className="flex items-center justify-center gap-3 py-4">
-            <FileText size={24} className="text-[#F97316]" />
+            <FileText size={24} className="text-[#111827]" />
             <span className="text-sm font-bold text-[#111827] truncate max-w-xs">{value.name}</span>
             <button
               type="button"

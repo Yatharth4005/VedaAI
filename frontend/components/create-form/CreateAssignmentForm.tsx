@@ -113,26 +113,27 @@ export function CreateAssignmentForm() {
         <PageHeader title="Assignment" showBack={true} />
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex-1 flex flex-col p-6 md:p-8 overflow-hidden relative min-h-0">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex-1 flex flex-col p-6 md:p-8 pb-[92px] md:pb-8 overflow-hidden relative min-h-0 max-w-4xl mx-auto w-full">
+        {/* Header Title with Green Active Indicator Dot */}
+        <div className="mb-4 shrink-0 px-1">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-pulse" />
+            <h2 className="text-lg md:text-xl font-extrabold text-[#111827] tracking-tight">
+              Create Assignment
+            </h2>
+          </div>
+          <p className="text-sm font-semibold text-[#6B7280]">
+            Set up a new assignment for your students
+          </p>
+        </div>
+
         {/* Step progress bar indicator */}
         <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden mb-6 shrink-0">
           <div className="h-full w-2/5 bg-[#111827] rounded-full" />
         </div>
 
         {/* Floating White Card Body Wrapper (Scrollable) */}
-        <div className="flex-1 bg-surface border border-border/80 rounded-[28px] shadow-sm p-6 md:p-8 space-y-8 overflow-y-auto pb-8 min-h-0">
-          {/* Header Title with Green Active Indicator Dot */}
-          <div className="border-b border-border/40 pb-5 shrink-0">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-pulse" />
-              <h2 className="text-lg md:text-xl font-extrabold text-[#111827] tracking-tight">
-                Create Assignment
-              </h2>
-            </div>
-            <p className="text-sm font-semibold text-[#6B7280]">
-              Set up a new assignment for your students
-            </p>
-          </div>
+        <div className="flex-1 bg-surface border border-border/40 rounded-[32px] shadow-[0_16px_48px_-12px_rgba(0,0,0,0.06)] p-6 md:p-8 space-y-8 overflow-y-auto pb-8 min-h-0">
 
           {/* Form Content Body */}
           <div className="space-y-6">
@@ -147,10 +148,10 @@ export function CreateAssignmentForm() {
               {/* Subject & Class input fields */}
               <div className="grid grid-cols-2 gap-5 mb-6">
                 <div className="space-y-1.5">
-                  <Label className="text-xs font-bold text-[#111827] uppercase tracking-wider">Subject</Label>
+                  <Label className="text-[11px] font-bold text-[#6B7280] uppercase tracking-wider">Subject</Label>
                   <Input
                     placeholder="eg : science"
-                    className="rounded-xl h-10 border-border/80 text-sm font-medium text-[#111827] focus:ring-[#F97316]/20 focus:border-[#F97316]"
+                    className="rounded-2xl h-11 border-border/60 bg-white/50 text-sm font-bold text-[#111827] focus-visible:ring-[#111827]/10 focus-visible:border-[#111827] transition-all"
                     {...register("subject")}
                   />
                   {errors.subject && (
@@ -158,10 +159,10 @@ export function CreateAssignmentForm() {
                   )}
                 </div>
                 <div className="space-y-1.5">
-                  <Label className="text-xs font-bold text-[#111827] uppercase tracking-wider">Class</Label>
+                  <Label className="text-[11px] font-bold text-[#6B7280] uppercase tracking-wider">Class</Label>
                   <Input
                     placeholder="eg : 8th"
-                    className="rounded-xl h-10 border-border/80 text-sm font-medium text-[#111827] focus:ring-[#F97316]/20 focus:border-[#F97316]"
+                    className="rounded-2xl h-11 border-border/60 bg-white/50 text-sm font-bold text-[#111827] focus-visible:ring-[#111827]/10 focus-visible:border-[#111827] transition-all"
                     {...register("class")}
                   />
                   {errors.class && (
@@ -177,11 +178,11 @@ export function CreateAssignmentForm() {
 
               {/* Due Date input field with Calendar icon inside */}
               <div className="space-y-1.5 mb-6 relative max-w-sm">
-                <Label className="text-xs font-bold text-[#111827] uppercase tracking-wider">Due Date</Label>
+                <Label className="text-[11px] font-bold text-[#6B7280] uppercase tracking-wider">Due Date</Label>
                 <div className="relative">
                   <Input
                     placeholder="DD-MM-YYYY"
-                    className="rounded-xl h-10 pr-11 border-border/80 text-sm font-medium text-[#111827] focus:ring-[#F97316]/20 focus:border-[#F97316]"
+                    className="rounded-2xl h-11 pr-11 border-border/60 bg-white/50 text-sm font-bold text-[#111827] focus-visible:ring-[#111827]/10 focus-visible:border-[#111827] transition-all"
                     {...register("dueDate")}
                   />
                   <div className="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center cursor-pointer">
@@ -204,7 +205,7 @@ export function CreateAssignmentForm() {
               {/* Question Types Table section */}
               <div className="space-y-4">
                 {/* Column Headers */}
-                <div className="grid grid-cols-[1fr_24px_112px_112px] gap-4 text-xs font-extrabold text-[#6B7280] uppercase tracking-wider select-none px-1">
+                <div className="hidden md:grid grid-cols-[1fr_24px_112px_112px] gap-4 text-xs font-extrabold text-[#6B7280] uppercase tracking-wider select-none px-1">
                   <span>Question Type</span>
                   <span />
                   <span className="text-center">No. of Questions</span>
@@ -243,25 +244,25 @@ export function CreateAssignmentForm() {
                   )}
 
                   {/* Summary Stats */}
-                  <div className="flex items-center gap-6 text-sm font-bold text-[#6B7280] select-none">
-                    <span>
-                      Total Questions : <span className="text-[#111827] font-extrabold">{totalQ}</span>
-                    </span>
-                    <span>
-                      Total Marks : <span className="text-[#111827] font-extrabold">{totalM}</span>
-                    </span>
+                  <div className="flex flex-col items-end gap-1.5 text-xs font-bold text-[#6B7280] select-none shrink-0 self-end sm:self-auto">
+                    <div>
+                      Total Questions : <span className="text-[#111827] font-extrabold text-sm">{totalQ}</span>
+                    </div>
+                    <div>
+                      Total Marks : <span className="text-[#111827] font-extrabold text-sm">{totalM}</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Additional Information details with mic icon inside */}
               <div className="space-y-1.5 mt-8 relative">
-                <Label className="text-xs font-bold text-[#111827] uppercase tracking-wider">Additional Information (For better output)</Label>
+                <Label className="text-[11px] font-bold text-[#6B7280] uppercase tracking-wider">Additional Information (For better output)</Label>
                 <div className="relative">
                   <Textarea
                     placeholder="e.g Generate a question paper for 3 hour exam duration..."
                     rows={4}
-                    className="rounded-[20px] resize-none pr-12 pl-4 py-3 border-border/80 text-sm font-medium text-[#111827] focus:ring-[#F97316]/20 focus:border-[#F97316] leading-relaxed"
+                    className="rounded-[20px] resize-none pr-12 pl-4 py-3 border-border/60 bg-white/50 text-sm font-medium text-[#111827] focus-visible:ring-[#111827]/10 focus-visible:border-[#111827] transition-all leading-relaxed"
                     {...register("additionalInstructions")}
                   />
                   <Mic

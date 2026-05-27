@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Bell, Menu } from "lucide-react";
 import { VedaLogo } from "./VedaLogo";
+import Image from "next/image";
 
 export function MobileHeader() {
   return (
@@ -19,8 +20,14 @@ export function MobileHeader() {
           <Bell size={20} />
           <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
         </button>
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-200 to-orange-300 flex items-center justify-center text-sm font-semibold text-orange-900">
-          J
+        <div className="w-8 h-8 rounded-full border border-border overflow-hidden shrink-0 shadow-sm relative bg-white">
+          <Image
+            src="/monkey-avatar.png"
+            alt="User Avatar"
+            fill
+            className="object-cover"
+            sizes="32px"
+          />
         </div>
         <button
           type="button"

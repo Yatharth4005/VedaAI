@@ -116,7 +116,7 @@ function AssignmentOutputInner() {
   const cls = localPaper?.metadata.class ?? "";
 
   return (
-    <div className="min-h-full bg-background">
+    <div className="h-full overflow-y-auto pb-28 md:pb-6 bg-background">
       <div className="hidden md:block">
         <PageHeader
           title="Create New"

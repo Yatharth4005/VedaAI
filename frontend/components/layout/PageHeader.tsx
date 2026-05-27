@@ -48,7 +48,7 @@ export function PageHeader({
       </div>
 
       {/* Right side: Notifications & User profile card */}
-      <div className="flex items-center gap-3 shrink-0">
+      <div className="hidden md:flex items-center gap-3 shrink-0">
         {/* Notification Bell */}
         <button
           type="button"

@@ -30,7 +30,7 @@ export function AssignmentCard({ assignment, onDelete }: Props) {
       : `Quiz on ${assignment.subject}`;
 
   return (
-    <div className="bg-surface border border-border/80 rounded-[24px] p-5 shadow-sm hover:shadow-md transition-all duration-200 relative group flex flex-col justify-between min-h-[140px]">
+    <div className="bg-surface border border-border/80 rounded-[24px] p-5 shadow-sm hover:shadow-md transition-all duration-200 relative group flex flex-col justify-between min-h-[100px]">
       <div className="flex items-start justify-between gap-3">
         <Link
           href={`/assignments/${assignment._id}`}
@@ -70,11 +70,11 @@ export function AssignmentCard({ assignment, onDelete }: Props) {
           )}
         </div>
       </div>
-      <div className="flex items-center justify-between text-xs mt-6 pt-4 border-t border-border/40 select-none">
-        <span className="text-[#6B7280] font-semibold">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[#6B7280] font-semibold mt-4 select-none">
+        <span>
           Assigned on : <span className="text-[#111827] font-extrabold">{toDisplayDate(assignment.createdAt)}</span>
         </span>
-        <span className="text-[#6B7280] font-semibold">
+        <span>
           Due : <span className="text-[#111827] font-extrabold">{toDisplayDate(assignment.dueDate)}</span>
         </span>
       </div>

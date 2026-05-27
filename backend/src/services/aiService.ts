@@ -71,8 +71,10 @@ Rules:
 2. Difficulty distribution: 40% easy, 40% medium, 20% hard
 3. For MCQ: include 4 options with labels A, B, C, D as objects { "label": "A", "text": "..." }
 4. Total marks across all questions must exactly equal ${assignment.totalMarks}
-5. Each answer key entry must be concise
+5. Each answer key entry must be extremely concise
 6. All questions must relate to ${assignment.subject} for Class ${assignment.class}
+7. Latency Optimization: Keep all question texts, MCQ option texts, and section instructions extremely concise, direct, and brief (under 15 words per question/option). Avoid long context blocks or wordy preambles to minimize model output tokens and response latency.
+8. Ultra-Brief Answer Key: Each answer key entry must contain ONLY the direct, exact answer (e.g. for MCQs, just the option letter like "A"; for short/numerical questions, a single short phrase or the exact number like "x = 5" or "Photosynthesis"). Do NOT write long explanations, paragraphs, or step-by-step reasoning. Respond with the absolute minimum words necessary.
 
 Respond with ONLY this JSON structure (no markdown):
 {
