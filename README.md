@@ -1,12 +1,12 @@
-# 🧬 VedaAI — AI Assessment Creator
+# VedaAI — AI Assessment Creator
 
-> A premium, AI-powered exam and question paper generator designed for school teachers. Built with a robust monorepo architecture using Next.js 14, Express, BullMQ, Redis, Socket.io, and Google Gemini API.
+> A premium, AI-powered exam and question paper generator designed for school teachers. Built with a robust monorepo architecture using Next.js 14, Express, BullMQ, Redis, Socket.io, and the Google Gemini API.
 
 ---
 
-## 🗺️ Architecture Overview
+## Architecture Overview
 
-VedaAI is engineered to handle complex LLM generation flows asynchronously, ensuring that teachers never experience a frozen UI while waiting for 20+ questions to be structured, formatted, and validated.
+VedaAI is engineered to handle complex LLM generation flows asynchronously, ensuring that teachers never experience a frozen UI while waiting for questions to be structured, formatted, and validated.
 
 ```
 ┌───────────────────────────────────────┐
@@ -37,20 +37,20 @@ VedaAI is engineered to handle complex LLM generation flows asynchronously, ensu
 
 ---
 
-## 🛠️ Tech Stack & Key Features
+## Tech Stack & Key Features
 
 *   **Frontend:** Next.js 14 (App Router), TypeScript, Tailwind CSS, shadcn/ui components, Zustand (State Management), React Hook Form + Zod (Validation), `Socket.io-client` for real-time progress updates, and `@react-pdf/renderer` for pixel-perfect PDF exports.
 *   **Backend:** Express, Mongoose (MongoDB), BullMQ (Job Queue), `Socket.io` (Realtime events).
-*   **AI Engine:** Google Gemini SDK (`@google/generative-ai`) leveraging Zod-parsed structured JSON outputs via `gemini-2.5-flash` or `gemini-3.5-flash`.
+*   **AI Engine:** Google Gemini SDK (`@google/generative-ai`) leveraging Zod-parsed structured JSON outputs via `gemini-2.5-flash`.
 *   **Database & Cache:** MongoDB Atlas for persistence and Upstash Redis for message queuing and job handling.
 
 ---
 
-## 🚀 Local Setup & Installation
+## Local Setup & Installation
 
 ### Prerequisites
 - **Node.js** v20+
-- **Docker Desktop** (for running local Mongo & Redis)
+- **Docker Desktop** (for running local MongoDB & Redis)
 - A **Google AI Studio** API key ([Get one here](https://aistudio.google.com/))
 
 ### 1. Launch Infrastructure
@@ -71,7 +71,7 @@ docker compose up -d
    MONGODB_URI=mongodb://localhost:27017/vedaai
    REDIS_URL=redis://localhost:6379
    GEMINI_API_KEY=AIzaSy...
-   GEMINI_MODEL=gemini-2.5-flash  # Use gemini-2.5-flash or gemini-3.5-flash
+   GEMINI_MODEL=gemini-2.5-flash
    FRONTEND_URL=http://localhost:3000
    NODE_ENV=development
    ```
@@ -105,7 +105,7 @@ docker compose up -d
 
 ---
 
-## 🧪 E2E Verification & Smoke Test
+## E2E Verification & Smoke Test
 
 To verify the backend queue, workers, and Gemini integration without running the frontend UI, execute this `curl` command:
 
@@ -115,10 +115,10 @@ curl -X POST http://localhost:4000/api/assignments \
   -d '{
     "subject": "Mathematics",
     "class": "Class 9",
-    "dueDate": "2030-12-31",
+    "dueDate": "28-05-2026",
     "questionTypes": [
       {
-        "type": "Numerical Problem",
+        "type": "Numerical Problems",
         "count": 2,
         "marksPerQuestion": 5
       }
@@ -133,7 +133,7 @@ This will queue a job. Check your worker console to see Gemini generating the as
 
 ---
 
-## 📈 Deployment Reference
+## Deployment Reference
 
 | Service | Platform | Configuration Details |
 | :--- | :--- | :--- |
@@ -145,7 +145,7 @@ This will queue a job. Check your worker console to see Gemini generating the as
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```
 VedaAI/
@@ -171,6 +171,6 @@ VedaAI/
 
 ---
 
-## 🔒 License
+## License
 
 Private repository for hiring assignment submission. All rights reserved.
