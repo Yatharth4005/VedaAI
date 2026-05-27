@@ -128,12 +128,13 @@ export function CreateAssignmentForm() {
         </div>
 
         {/* Step progress bar indicator */}
-        <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden mb-6 shrink-0">
-          <div className="h-full w-2/5 bg-[#111827] rounded-full" />
+        <div className="grid grid-cols-2 gap-3 mb-6 shrink-0">
+          <div className="h-1.5 bg-[#4B5563] rounded-full" />
+          <div className="h-1.5 bg-[#E5E7EB] rounded-full" />
         </div>
 
         {/* Floating White Card Body Wrapper (Scrollable) */}
-        <div className="flex-1 bg-surface border border-border/40 rounded-[32px] shadow-[0_16px_48px_-12px_rgba(0,0,0,0.06)] p-6 md:p-8 space-y-8 overflow-y-auto pb-8 min-h-0 touch-pan-y">
+        <div className="flex-1 bg-surface border border-border/40 rounded-[32px] shadow-[0_16px_48px_-12px_rgba(0,0,0,0.06)] p-6 md:p-8 space-y-8 overflow-y-auto no-scrollbar pb-8 min-h-0 touch-pan-y">
 
           {/* Form Content Body */}
           <div className="space-y-6">

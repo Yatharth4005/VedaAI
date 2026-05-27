@@ -73,7 +73,7 @@ export default function AssignmentsPage() {
             </div>
 
             {/* Grid List Container (Scrollable) */}
-            <div className="flex-1 overflow-y-auto min-h-0 pr-1 space-y-4 touch-pan-y">
+            <div className="flex-1 overflow-y-auto no-scrollbar min-h-0 pr-1 space-y-4 touch-pan-y pb-32">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-5">
                 {filtered.map((a) => (
                   <AssignmentCard
@@ -89,9 +89,6 @@ export default function AssignmentsPage() {
                   No assignments match your search.
                 </p>
               )}
-
-              {/* Physical spacer to guarantee the last card clears the floating bottom tab bar on mobile */}
-              <div className="h-[120px] md:hidden" />
             </div>
 
             {/* Bottom Fade Mask Effect (Scroll Fade overlay) */}

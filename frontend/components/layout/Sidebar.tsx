@@ -27,6 +27,7 @@ const navItems = [
 export function Sidebar() {
   const pathname = usePathname();
   const assignmentCount = useAssignmentStore((s) => s.assignments.length);
+  const libraryCount = 0; // Library is currently empty
 
   return (
     <div className="w-[260px] h-full flex flex-col bg-surface border border-border/80 rounded-[24px] shadow-sm shrink-0 overflow-hidden py-6 px-4">
@@ -62,8 +63,8 @@ export function Sidebar() {
           const badge =
             badgeKey === "assignments" && assignmentCount > 0
               ? assignmentCount
-              : badgeKey === "library"
-                ? 32
+              : badgeKey === "library" && libraryCount > 0
+                ? libraryCount
                 : null;
 
           return (
