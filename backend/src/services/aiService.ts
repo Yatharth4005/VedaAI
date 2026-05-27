@@ -44,6 +44,36 @@ function getModel(modelName: string) {
   });
 }
 
+function parseDuration(instructions?: string): number | null {
+  if (!instructions) return null;
+  const text = instructions.toLowerCase();
+
+  const hourRegex = /(\d+(?:\.\d+)?)\s*(?:hour|hr)s?/i;
+  const minuteRegex = /(\d+)\s*(?:minute|min)s?/i;
+
+  const hoursAndMinsRegex = /(\d+)\s*(?:hour|hr)s?\s*(?:and\s*)?(\d+)\s*(?:minute|min)s?/i;
+  const hoursAndMinsMatch = text.match(hoursAndMinsRegex);
+  if (hoursAndMinsMatch) {
+    const hours = parseInt(hoursAndMinsMatch[1], 10);
+    const mins = parseInt(hoursAndMinsMatch[2], 10);
+    return hours * 60 + mins;
+  }
+
+  const hourMatch = text.match(hourRegex);
+  const minuteMatch = text.match(minuteRegex);
+
+  if (hourMatch) {
+    const hours = parseFloat(hourMatch[1]);
+    return Math.round(hours * 60);
+  }
+
+  if (minuteMatch) {
+    return parseInt(minuteMatch[1], 10);
+  }
+
+  return null;
+}
+
 function buildPrompt(assignment: IAssignment): string {
   const rows = assignment.questionTypes
     .map(
@@ -52,7 +82,8 @@ function buildPrompt(assignment: IAssignment): string {
     )
     .join("\n");
 
-  const timeMinutes = Math.max(30, Math.round(assignment.totalMarks * 1.2));
+  const parsedDuration = parseDuration(assignment.additionalInstructions);
+  const timeMinutes = parsedDuration !== null ? parsedDuration : 90;
 
   return `Create a question paper with these exact requirements:
 School: Delhi Public School, Sector-4, Bokaro
